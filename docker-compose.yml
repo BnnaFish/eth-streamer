@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  web:
+    build:
+      context: .
+      target: production
+    command: python -m app
+
+  test:
+    build:
+      context: .
+      target: development
+    env_file: test.env
+
+  bash:
+    tty: true
+    build:
+      context: .
+      target: development
+    volumes:
+      - type: bind
+        source: ./
+        target: /app/.

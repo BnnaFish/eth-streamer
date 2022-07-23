@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "eth-streamer"
+version = "0.1.0"
+description = ""
+authors = ["Nikita Semenov <nasemenov.git@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiohttp = "^3.8.1"
+uvloop = "^0.16.0"
+pyhocon = "^0.3.59"
+typer = "^0.6.1"
+pydentic = "^0.0.1-alpha.3"
+
+[tool.poetry.dev-dependencies]
+wemake-python-styleguide = "^0.16.1"
+mypy = "^0.971"
+aioresponses = "^0.7.3"
+pytest = "^7.1.2"
+pytest-clarity = "^1.0.1"
+pytest-cov = "^3.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
