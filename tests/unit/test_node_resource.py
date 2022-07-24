@@ -518,3 +518,28 @@ async def test_get_transaction_receipt(
     assert receipt.result == TransactionReceipt(
         contract_address="0xd16bdccae06dfd701a59103446a17e22e9ca0ef0"
     )
+
+
+async def test_get_estimate_gas_transfer_from(http_node_resource, session) -> None:
+    """
+    real contract that is erc721
+    https://etherscan.io/address/0xd16bdccae06dfd701a59103446a17e22e9ca0ef0
+    """
+    response = await http_node_resource.get_estimated_gas_transfer_from(
+        contract_address="0xD16bdCCAe06DFD701a59103446A17e22e9ca0eF0", session=session
+    )
+    assert (
+        response.error.message
+        == "execution reverted: ERC721: transfer caller is not owner nor approved"
+    )
+
+
+async def test_get_estimate_gas_transfer_from_not_erc711(http_node_resource, session) -> None:
+    """
+    real contract that is not erc721
+    https://etherscan.io/address/0x22407b385e0f464f166f1f05abcd015278192e9e
+    """
+    response = await http_node_resource.get_estimated_gas_transfer_from(
+        contract_address="0x22407b385e0f464f166f1f05abcd015278192e9e", session=session
+    )
+    assert response is None

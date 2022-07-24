@@ -19,8 +19,14 @@ class NodeResponseResult:
 
 
 @dataclass
+class Error:
+    message: str
+
+
+@dataclass
 class NodeResponse:
-    result: Optional[NodeResponseResult]
+    result: Optional[NodeResponseResult] = None
+    error: Optional[Error] = None
     jsonrpc: str = "2.0"
     id: int = 1
 
@@ -73,3 +79,27 @@ class TransactionReceipt(NodeResponseResult):
 @dataclass
 class GetTransactionReceiptResponse(NodeResponse):
     result: TransactionReceipt
+
+
+@dataclass
+class CallParams:
+    from_: str = field(metadata={"data_key": "from"})
+    to: str
+    data: str
+
+
+@dataclass
+class GetEstimateGasRequest(NodeRequest):
+    """
+    https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_estimategas
+    """
+
+    params: tuple[CallParams]
+    method: str = "eth_estimateGas"
+
+
+@dataclass
+class GetEstimateGasErrorResponse(NodeResponse):
+    """
+    We are interesting only in default error message here
+    """
