@@ -33,6 +33,18 @@ def get_transaction_receipt_json() -> dict[Any, Any]:
 
 
 @fixture
+def get_estimated_gas_error_json() -> dict[Any, Any]:
+    with open("./tests/files/infura/get_estimated_gas_error.json", "r") as f:
+        return json.load(f)
+
+
+@fixture
+def get_estimated_gas_error() -> dict[Any, Any]:
+    with open("./tests/files/infura/get_estimated_gas.json", "r") as f:
+        return json.load(f)
+
+
+@fixture
 def mock_aioresponse():
     with aioresponses() as m:
         yield m
@@ -47,4 +59,18 @@ def get_by_number_mock(mock_aioresponse, get_by_number_json) -> None:
 def get_transaction_receipt_mock(mock_aioresponse, get_transaction_receipt_json) -> None:
     mock_aioresponse.post(
         f"{node_config.url}/{node_config.api_key}", payload=get_transaction_receipt_json
+    )
+
+
+@fixture
+def get_estimated_gas_error_mock(mock_aioresponse, get_estimated_gas_error_json) -> None:
+    mock_aioresponse.post(
+        f"{node_config.url}/{node_config.api_key}", payload=get_estimated_gas_error_json
+    )
+
+
+@fixture
+def get_estimated_gas_mock(mock_aioresponse, get_estimated_gas_error) -> None:
+    mock_aioresponse.post(
+        f"{node_config.url}/{node_config.api_key}", payload=get_estimated_gas_error
     )
