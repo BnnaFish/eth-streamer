@@ -8,13 +8,13 @@ from app.usecases.block_inspector import find_contracts_in_block
 
 
 async def stream_rfc_contracts(
-    start_block_id: int, session: ClientSession, node_resource: HTTPNodeResource
+    initial_block_id: int, session: ClientSession, node_resource: HTTPNodeResource
 ) -> AsyncGenerator[list[str], None]:
     """
-    Infinity generator from start_block_id
+    Infinity generator from initial_block_id
     Yield list of rfc-721 contracts if any
     """
-    counter = count(start_block_id)
+    counter = count(initial_block_id)
     for block_id in counter:
         finded_contracts = await find_contracts_in_block(
             block_id=block_id, node_resource=node_resource, session=session

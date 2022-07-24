@@ -536,7 +536,7 @@ async def test_get_estimate_gas_transfer_from(
     )
 
 
-async def test_get_estimate_gas_transfer_from_not_erc721(
+async def test_get_estimate_gas_transfer_not_erc721(
     http_node_resource, session, get_estimated_gas_mock
 ) -> None:
     """

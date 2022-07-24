@@ -11,9 +11,11 @@ async def test_block_inspector(http_node_resource, session) -> None:
 
 async def test_streamer(http_node_resource, session) -> None:
     finded_lists_of_contracts = []
-    async for finded_contracts in stream_rfc_contracts(
-        start_block_id=13821429, session=session, node_resource=http_node_resource
-    ):
+    stream = stream_rfc_contracts(
+        initial_block_id=13821429, session=session, node_resource=http_node_resource
+    )
+
+    async for finded_contracts in stream:
         finded_lists_of_contracts.append(finded_contracts)
         if len(finded_lists_of_contracts) == 3:
             break

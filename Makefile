@@ -41,6 +41,9 @@ build.test_integration:
 build.bash:
 	@docker-compose build bash
 
+build.bash:
+	@docker-compose build web
+
 # docker: exec
 bash:
 	@docker-compose run bash sh
@@ -63,3 +66,6 @@ dc.test: stop build.test
 dc.test_integration: stop build.test_integration
 	@docker-compose run test_integration make test_integration;
 	@docker-compose stop;
+
+dc.run: stop build.web
+	@docker-compose up web
