@@ -43,13 +43,13 @@ bash:
 dc.isort: build.bash
 	@docker-compose run bash make isort;
 
-dc.flake8: stop down build.test
+dc.flake8: stop build.test
 	@docker-compose run test make flake8;
 
-dc.lint: stop down build.test
+dc.lint: stop build.test
 	@docker-compose run test make lint;
 
-dc.test: stop down build.test
+dc.test: stop build.test
 	@docker-compose run test make test;
 	@docker-compose run test make lint;
 	@docker-compose stop;

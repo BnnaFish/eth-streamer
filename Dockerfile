@@ -1,4 +1,4 @@
-FROM docker-proxy.sberned.ru/python:3.10.5-slim as dependencies
+FROM python:3.10.5-slim as dependencies
 
 ENV PYTHONUNBUFFERED=1 \
   PYTHONDONTWRITEBYTECODE=1 \
@@ -18,11 +18,10 @@ ENV PYTHONUNBUFFERED=1 \
 ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 WORKDIR /app
 
-# we use make for lint / test / migrate commands
 RUN /bin/sh -c set -ex; \
   apt-get update; \
   apt-get install -y --no-install-recommends curl build-essential; \
-  curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python; \
+  curl -sSL https://install.python-poetry.org | python; \
   rm -rf /var/lib/apt/lists/*
 
 # copy python dependencies
@@ -34,15 +33,11 @@ RUN groupadd -r app && useradd --no-log-init -r -g app app && chown -R app /app
 COPY --chown=app:app settings /app/settings
 COPY --chown=app:app Makefile pyproject.toml /app/
 
-# bump version from git tags
-COPY --chown=app:app VERSION /app/
-RUN poetry version $(cat VERSION)
-
 # layer with dev dependencies installed
 FROM dependencies as development
 
 USER root
-COPY .editorconfig flake8.tests.ini setup.cfg /app/
+COPY flake8.tests.ini setup.cfg conftest.py /app/
 
 RUN cd $PYSETUP_PATH; \
   poetry export --dev --without-hashes --with-credentials -f requirements.txt -o requirements.txt; \

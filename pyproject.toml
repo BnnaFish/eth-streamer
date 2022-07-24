@@ -10,7 +10,7 @@ aiohttp = "^3.8.1"
 uvloop = "^0.16.0"
 pyhocon = "^0.3.59"
 typer = "^0.6.1"
-pydentic = "^0.0.1-alpha.3"
+pydantic = "^1.9.1"
 
 [tool.poetry.dev-dependencies]
 wemake-python-styleguide = "^0.16.1"
@@ -19,6 +19,9 @@ aioresponses = "^0.7.3"
 pytest = "^7.1.2"
 pytest-clarity = "^1.0.1"
 pytest-cov = "^3.0.0"
+black = "^22.6.0"
+pytest-testdox = "^3.0.1"
+pytest-aiohttp = "^1.0.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
