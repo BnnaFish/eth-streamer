@@ -33,7 +33,13 @@ async def is_implementing_rfc(
     having_owned_of = await node_resource.get_estimated_gas_owner_of(
         contract_address=contract_address, session=session
     )
-    return having_owned_of is not None
+    if having_owned_of is None:
+        return False
+
+    having_balanced_of = await node_resource.get_estimated_gas_balance_of(
+        contract_address=contract_address, session=session
+    )
+    return having_balanced_of is not None
 
 
 async def find_contracts_in_block(

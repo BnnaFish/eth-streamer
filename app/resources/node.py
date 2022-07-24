@@ -144,3 +144,33 @@ class HTTPNodeResource:
             if "error" in json_reps and json_reps["error"]["message"] == "execution reverted":
                 return None
             return node_response_schema.load(json_reps)
+
+    async def get_estimated_gas_balance_of(
+        self, contract_address: str, session: ClientSession
+    ) -> Optional[node_rpc.NodeResponse]:
+        """
+        ad-hoc request with hardcoded data
+        not for wildcard purpose
+
+        if transaction reverted then method dont exist
+        """
+        some_random_address = "0xE052113bd7D7700d623414a0a4585BCaE754E9d5"
+        # generated once using https://abi.hashex.org/
+        # balanceOf 0xE052113bd7D7700d623414a0a4585BCaE754E9d5
+        rpc_data = "70a08231000000000000000000000000e052113bd7d7700d623414a0a4585bcae754e9d5"
+        rpc_params = node_rpc.CallParams(
+            from_=some_random_address, to=contract_address, data=rpc_data
+        )
+        request = node_rpc.GetEstimateGasRequest(params=(rpc_params,))
+
+        async with session.post(
+            URL(self._url) / self._api_key, json=get_estimate_gas_req_schema.dump(request)
+        ) as resp:
+            try:
+                json_reps = await resp.json()
+            except ContentTypeError:
+                logger.exception("Not json response. Got: %s", await resp.text())
+                raise
+            if "error" in json_reps and json_reps["error"]["message"] == "execution reverted":
+                return None
+            return node_response_schema.load(json_reps)
