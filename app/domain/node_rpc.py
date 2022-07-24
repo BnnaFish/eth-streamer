@@ -1,5 +1,5 @@
 # flake8: noqa WPS110 Found wrong variable name: params
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Optional
 
 
@@ -20,7 +20,7 @@ class NodeResponseResult:
 
 @dataclass
 class NodeResponse:
-    result: NodeResponseResult
+    result: Optional[NodeResponseResult]
     jsonrpc: str = "2.0"
     id: int = 1
 
@@ -53,3 +53,23 @@ class GetBlockByNumberResult(NodeResponseResult):
 @dataclass
 class GetBlockByNumberResponse(NodeResponse):
     result: GetBlockByNumberResult
+
+
+@dataclass
+class GetTransactionReceiptRequest(NodeRequest):
+    """
+    https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionreceipt
+    """
+
+    params: tuple[str]  # transaction_hash
+    method: str = "eth_getTransactionReceipt"
+
+
+@dataclass
+class TransactionReceipt(NodeResponseResult):
+    contract_address: str = field(metadata={"data_key": "contractAddress"})
+
+
+@dataclass
+class GetTransactionReceiptResponse(NodeResponse):
+    result: TransactionReceipt

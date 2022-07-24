@@ -1,4 +1,9 @@
-from app.domain.node_rpc import GetBlockByNumberResponse, GetBlockByNumberResult, TransactionObject
+from app.domain.node_rpc import (
+    GetBlockByNumberResponse,
+    GetBlockByNumberResult,
+    TransactionObject,
+    TransactionReceipt,
+)
 
 
 async def test_get_block_by_id(http_node_resource, session, get_by_number_mock) -> None:
@@ -498,4 +503,18 @@ async def test_get_block_by_id(http_node_resource, session, get_by_number_mock) 
         ),
         jsonrpc="2.0",
         id=1,
+    )
+
+
+async def test_get_transaction_receipt(
+    http_node_resource, session, get_transaction_receipt_mock
+) -> None:
+    transaction = TransactionObject(
+        to="some", hash="0x45093898df19f35b852c0d07bc32cacd00751e2eb36804b2fb443ef7b373929a"
+    )
+    receipt = await http_node_resource.get_transaction_receipt(
+        transaction=transaction, session=session
+    )
+    assert receipt.result == TransactionReceipt(
+        contract_address="0xd16bdccae06dfd701a59103446a17e22e9ca0ef0"
     )

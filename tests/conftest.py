@@ -27,6 +27,12 @@ def get_by_number_json() -> dict[Any, Any]:
 
 
 @fixture
+def get_transaction_receipt_json() -> dict[Any, Any]:
+    with open("./tests/files/infura/get_transaction_receipt.json", "r") as f:
+        return json.load(f)
+
+
+@fixture
 def mock_aioresponse():
     with aioresponses() as m:
         yield m
@@ -35,3 +41,10 @@ def mock_aioresponse():
 @fixture
 def get_by_number_mock(mock_aioresponse, get_by_number_json) -> None:
     mock_aioresponse.post(f"{node_config.url}/{node_config.api_key}", payload=get_by_number_json)
+
+
+@fixture
+def get_transaction_receipt_mock(mock_aioresponse, get_transaction_receipt_json) -> None:
+    mock_aioresponse.post(
+        f"{node_config.url}/{node_config.api_key}", payload=get_transaction_receipt_json
+    )
