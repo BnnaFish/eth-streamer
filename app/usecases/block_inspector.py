@@ -7,11 +7,11 @@ Flow is follow:
 3) take transactions hash and fetch its receipt
 4) get contract address from receipt
 5) then we should inspect if contract support RFC-721 methods by calling estimatedGas
-6) if certain error returns - that's what we are looking for cause we are not owners
-7) print result and loop to #1
+6) if certain error returns - that's what we are looking for. Cause we are not owners
+7) if method rejected then we assume its never exists
+8) print result and loop to #1
 """
 import asyncio
-from collections.abc import AsyncGenerator
 
 from aiohttp import ClientSession
 
@@ -38,7 +38,7 @@ async def is_implementing_rfc(
 
 async def find_contracts_in_block(
     block_id: int, node_resource: HTTPNodeResource, session: ClientSession
-) -> AsyncGenerator[str, None]:
+) -> list[str]:
     """
     Return all hashs of rpc-721 contracts for a given block if any
 
@@ -72,6 +72,8 @@ async def find_contracts_in_block(
     ]
     interface_mask = await asyncio.gather(*interface_mask_tasks)
 
+    finded_contracts = []
     for idx, resp in enumerate(contract_address_responses):
         if interface_mask[idx]:
-            yield resp.result.contract_address
+            finded_contracts.append(resp.result.contract_address)
+    return finded_contracts
