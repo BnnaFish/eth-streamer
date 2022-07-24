@@ -12,20 +12,19 @@ class NodeRequest:
 
 
 @dataclass
-class NodeResponseResult:
-    """
-    Base class for results
-    """
-
-
-@dataclass
 class Error:
     message: str
+
+    @property
+    def is_rfc_721(self) -> bool:
+        return (
+            self.message == "execution reverted: ERC721: transfer caller is not owner nor approved"
+        )
 
 
 @dataclass
 class NodeResponse:
-    result: Optional[NodeResponseResult] = None
+    result: Optional[Any] = None
     error: Optional[Error] = None
     jsonrpc: str = "2.0"
     id: int = 1
@@ -48,7 +47,7 @@ class TransactionObject:
 
 
 @dataclass
-class GetBlockByNumberResult(NodeResponseResult):
+class GetBlockByNumberResult:
     """
     Ommiting everything except transactions for simplisity in test project
     """
@@ -72,7 +71,7 @@ class GetTransactionReceiptRequest(NodeRequest):
 
 
 @dataclass
-class TransactionReceipt(NodeResponseResult):
+class TransactionReceipt:
     contract_address: str = field(metadata={"data_key": "contractAddress"})
 
 
@@ -103,3 +102,8 @@ class GetEstimateGasErrorResponse(NodeResponse):
     """
     We are interesting only in default error message here
     """
+
+
+@dataclass
+class GetEstimateGasResponse(NodeResponse):
+    result: str

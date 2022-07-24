@@ -7,11 +7,15 @@ services:
       target: production
     command: python -m app
 
-  test:
+  test: &test
     build:
       context: .
       target: development
     env_file: test.env
+
+  test_integration:
+    <<: *test
+    env_file: .env
 
   bash:
     tty: true

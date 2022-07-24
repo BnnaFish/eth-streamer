@@ -13,7 +13,10 @@ flake8.tests:
 	@flake8 --append-config=flake8.tests.ini tests
 
 test:
-	@pytest
+	@pytest ./tests/unit
+
+test_integration:
+	@pytest ./tests/integration
 
 isort:
 	isort --atomic .
@@ -31,6 +34,9 @@ build.web:
 
 build.test:
 	@docker-compose build test
+
+build.test_integration:
+	@docker-compose build test_integration
 
 build.bash:
 	@docker-compose build bash
@@ -52,4 +58,8 @@ dc.lint: stop build.test
 dc.test: stop build.test
 	@docker-compose run test make test;
 	@docker-compose run test make lint;
+	@docker-compose stop;
+
+dc.test_integration: stop build.test_integration
+	@docker-compose run test_integration make test_integration;
 	@docker-compose stop;
