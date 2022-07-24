@@ -550,7 +550,7 @@ async def test_get_estimate_gas_transfer_from_not_erc721(
 
 
 async def test_get_estimate_gas_owner_of(
-    http_node_resource, session, get_estimated_gas_error_mock
+    http_node_resource, session, get_estimated_gas_mock
 ) -> None:
     """
     real contract that is erc721
@@ -559,7 +559,17 @@ async def test_get_estimate_gas_owner_of(
     response = await http_node_resource.get_estimated_gas_owner_of(
         contract_address="0xD16bdCCAe06DFD701a59103446A17e22e9ca0eF0", session=session
     )
-    assert (
-        response.error.message
-        == "execution reverted: ERC721: transfer caller is not owner nor approved"
+    assert response is not None
+
+
+async def test_get_estimate_gas_owner_of_rejected(
+    http_node_resource, session, get_estimated_gas_rejected_mock
+) -> None:
+    """
+    real contract that is erc721
+    https://etherscan.io/address/0xd16bdccae06dfd701a59103446a17e22e9ca0ef0
+    """
+    response = await http_node_resource.get_estimated_gas_owner_of(
+        contract_address="0xD16bdCCAe06DFD701a59103446A17e22e9ca0eF0", session=session
     )
+    assert response is None

@@ -39,8 +39,14 @@ def get_estimated_gas_error_json() -> dict[Any, Any]:
 
 
 @fixture
-def get_estimated_gas_error() -> dict[Any, Any]:
+def get_estimated_gas_json() -> dict[Any, Any]:
     with open("./tests/files/infura/get_estimated_gas.json", "r") as f:
+        return json.load(f)
+
+
+@fixture
+def get_estimated_gas_rejected_json() -> dict[Any, Any]:
+    with open("./tests/files/infura/get_estimated_gas_rejected.json", "r") as f:
         return json.load(f)
 
 
@@ -70,7 +76,14 @@ def get_estimated_gas_error_mock(mock_aioresponse, get_estimated_gas_error_json)
 
 
 @fixture
-def get_estimated_gas_mock(mock_aioresponse, get_estimated_gas_error) -> None:
+def get_estimated_gas_mock(mock_aioresponse, get_estimated_gas_json) -> None:
     mock_aioresponse.post(
-        f"{node_config.url}/{node_config.api_key}", payload=get_estimated_gas_error
+        f"{node_config.url}/{node_config.api_key}", payload=get_estimated_gas_json
+    )
+
+
+@fixture
+def get_estimated_gas_rejected_mock(mock_aioresponse, get_estimated_gas_rejected_json) -> None:
+    mock_aioresponse.post(
+        f"{node_config.url}/{node_config.api_key}", payload=get_estimated_gas_rejected_json
     )
