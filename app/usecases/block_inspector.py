@@ -59,7 +59,7 @@ async def find_contracts_in_block(
         filter(lambda trns: trns.to is None, transactions_resp.result.transactions)
     )
     if not only_created_transactions:
-        raise StopAsyncIteration()
+        return []
 
     get_contract_address_tasks = [
         node_resource.get_transaction_receipt(transaction=trns, session=session)
