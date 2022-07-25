@@ -6,9 +6,9 @@ Flow is follow:
 2) keep only those with "to" is null. It's a marker of contract created
 3) take transactions hash and fetch its receipt
 4) get contract address from receipt
-5) then we should inspect if contract support ERC-721 methods by calling estimatedGas
-6) if certain error returns - that's what we are looking for. Cause we are not owners
-7) if method rejected then we assume its never exists
+5) then we should inspect if the contract support ERC-721 methods by calling estimatedGas
+6) if a certain error returns - that's what we are looking for. Cause we are not owners
+7) if method rejected then we assume it's never exists
 8) print result and loop to #1
 """
 import asyncio
@@ -24,18 +24,21 @@ async def is_implementing_erc(
     """
     Inspect all necessary methods that should exist in contract to support rfc
     """
+    # safeTransferFrom
     having_safe_transfer_from = await node_resource.get_estimated_gas_transfer_from(
         contract_address=contract_address, session=session
     )
     if having_safe_transfer_from is None or not having_safe_transfer_from.error.is_erc_721:  # type: ignore
         return False
 
+    # ownerOf
     having_owned_of = await node_resource.get_estimated_gas_owner_of(
         contract_address=contract_address, session=session
     )
     if having_owned_of is None:
         return False
 
+    # balancedOf
     having_balanced_of = await node_resource.get_estimated_gas_balance_of(
         contract_address=contract_address, session=session
     )
@@ -46,7 +49,7 @@ async def find_contracts_in_block(
     block_id: int, node_resource: HTTPNodeResource, session: ClientSession
 ) -> list[str]:
     """
-    Return all hashs of rpc-721 contracts for a given block if any
+    Return all hashes of rpc-721 contracts for a given block if any
 
     Done in async generator style to provide streaming
     Batch requests done concurrently but steps of pipeline are still sequential
@@ -78,8 +81,8 @@ async def find_contracts_in_block(
     ]
     interface_mask = await asyncio.gather(*interface_mask_tasks)
 
-    finded_contracts = []
+    discovered_contracts = []
     for idx, resp in enumerate(contract_address_responses):
         if interface_mask[idx]:
-            finded_contracts.append(resp.result.contract_address)
-    return finded_contracts
+            discovered_contracts.append(resp.result.contract_address)
+    return discovered_contracts

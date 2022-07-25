@@ -137,3 +137,11 @@ Screen will freeze without any message - it's ok.
 |-- setup.cfg
 |-- test.env - mocked envs for tests purpose
 ```
+
+## Future improvements
+- [ ] Add logging and logging config in settings
+- [ ] Fix case when steam reaching head of blockchain
+- [ ] Replace http to websocket
+- [ ] Handle unexpected exceptions with retries
+- [ ] Create proper fixture to mock external calls to infura assuming concurrency
+- [ ] Project structure in README looks ugly. Find a way to make it nice.
