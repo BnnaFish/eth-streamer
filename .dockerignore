@@ -1,0 +1,11 @@
+confer.yml
+.git/
+.gitignore
+*.log
+log/
+.idea/
+.vscode/
+
+*.egg-info
+__pycache__/
+.DS_store

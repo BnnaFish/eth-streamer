@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      target: production
+    command: python -m app --initial_block_id=13821429
+    env_file: .env
+
+  test: &test
+    build:
+      context: .
+      target: development
+    env_file: test.env
+
+  test_integration:
+    <<: *test
+    env_file: .env
+
+  bash:
+    tty: true
+    build:
+      context: .
+      target: development
+    volumes:
+      - type: bind
+        source: ./
+        target: /app/.
