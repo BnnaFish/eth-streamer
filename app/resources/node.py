@@ -1,16 +1,11 @@
-from logging import getLogger
 from typing import Optional
 
 from aiohttp import ClientSession
-from aiohttp.client_exceptions import ContentTypeError
 import marshmallow_dataclass
 from yarl import URL
 
 from app.domain import node_rpc
 from app.schema import BaseSchema
-
-logger = getLogger(__name__)
-
 
 get_block_by_number_req_schema = marshmallow_dataclass.class_schema(
     node_rpc.GetBlockByNumberRequest, base_schema=BaseSchema
@@ -63,11 +58,7 @@ class HTTPNodeResource:
         async with session.post(
             URL(self._url) / self._api_key, json=get_block_by_number_req_schema.dump(request)
         ) as resp:
-            try:
-                json_reps = await resp.json()
-            except ContentTypeError:
-                logger.exception("Not json response. Got: %s", await resp.text())
-                raise
+            json_reps = await resp.json()
             return get_block_by_number_resp_schema.load(json_reps)
 
     async def get_transaction_receipt(
@@ -77,11 +68,7 @@ class HTTPNodeResource:
         async with session.post(
             URL(self._url) / self._api_key, json=get_transaction_receipt_req_schema.dump(request)
         ) as resp:
-            try:
-                json_reps = await resp.json()
-            except ContentTypeError:
-                logger.exception("Not json response. Got: %s", await resp.text())
-                raise
+            json_reps = await resp.json()
             return get_transaction_receipt_resp_schema.load(json_reps)
 
     async def get_estimated_gas_transfer_from(
@@ -106,11 +93,7 @@ class HTTPNodeResource:
         async with session.post(
             URL(self._url) / self._api_key, json=get_estimate_gas_req_schema.dump(request)
         ) as resp:
-            try:
-                json_reps = await resp.json()
-            except ContentTypeError:
-                logger.exception("Not json response. Got: %s", await resp.text())
-                raise
+            json_reps = await resp.json()
             if "result" in json_reps:
                 return None
             return get_estimate_gas_error_resp_schema.load(json_reps)
@@ -136,11 +119,7 @@ class HTTPNodeResource:
         async with session.post(
             URL(self._url) / self._api_key, json=get_estimate_gas_req_schema.dump(request)
         ) as resp:
-            try:
-                json_reps = await resp.json()
-            except ContentTypeError:
-                logger.exception("Not json response. Got: %s", await resp.text())
-                raise
+            json_reps = await resp.json()
             if "error" in json_reps and json_reps["error"]["message"] == "execution reverted":
                 return None
             return node_response_schema.load(json_reps)
@@ -166,11 +145,7 @@ class HTTPNodeResource:
         async with session.post(
             URL(self._url) / self._api_key, json=get_estimate_gas_req_schema.dump(request)
         ) as resp:
-            try:
-                json_reps = await resp.json()
-            except ContentTypeError:
-                logger.exception("Not json response. Got: %s", await resp.text())
-                raise
+            json_reps = await resp.json()
             if "error" in json_reps and json_reps["error"]["message"] == "execution reverted":
                 return None
             return node_response_schema.load(json_reps)
