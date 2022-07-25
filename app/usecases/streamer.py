@@ -16,8 +16,8 @@ async def stream_erc_contracts(
     """
     counter = count(initial_block_id)
     for block_id in counter:
-        finded_contracts = await find_contracts_in_block(
+        discovered_contracts = await find_contracts_in_block(
             block_id=block_id, node_resource=node_resource, session=session
         )
-        if finded_contracts:
-            yield finded_contracts
+        if discovered_contracts:
+            yield discovered_contracts

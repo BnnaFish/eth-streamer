@@ -11,7 +11,7 @@ async def stream_and_print(initial_block_id: int) -> None:
     """
     node_resource = HTTPNodeResource(api_key=node_config.api_key, url=node_config.url)
     async with ClientSession(raise_for_status=True) as session:
-        async for finded_contracts in stream_erc_contracts(  # noqa: WPS352 Found multiline loop
+        async for discovered_contracts in stream_erc_contracts(  # noqa: WPS352 Found multiline loop
             initial_block_id=initial_block_id, session=session, node_resource=node_resource
         ):
-            print(finded_contracts)  # noqa: WPS421 Found wrong function call: print
+            print(discovered_contracts)  # noqa: WPS421 Found wrong function call: print
