@@ -1,5 +1,5 @@
 from app.usecases.block_inspector import find_contracts_in_block
-from app.usecases.streamer import stream_rfc_contracts
+from app.usecases.streamer import stream_erc_contracts
 
 
 async def test_block_inspector(http_node_resource, session) -> None:
@@ -11,7 +11,7 @@ async def test_block_inspector(http_node_resource, session) -> None:
 
 async def test_streamer(http_node_resource, session) -> None:
     finded_lists_of_contracts = []
-    stream = stream_rfc_contracts(
+    stream = stream_erc_contracts(
         initial_block_id=13821429, session=session, node_resource=http_node_resource
     )
 

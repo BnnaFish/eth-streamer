@@ -7,12 +7,12 @@ from app.resources.node import HTTPNodeResource
 from app.usecases.block_inspector import find_contracts_in_block
 
 
-async def stream_rfc_contracts(
+async def stream_erc_contracts(
     initial_block_id: int, session: ClientSession, node_resource: HTTPNodeResource
 ) -> AsyncGenerator[list[str], None]:
     """
     Infinity generator from initial_block_id
-    Yield list of rfc-721 contracts if any
+    Yield list of erc-721 contracts if any
     """
     counter = count(initial_block_id)
     for block_id in counter:

@@ -1,12 +1,12 @@
 """
-Main code with logic to find RFC-721 contracts
+Main code with logic to find ERC-721 contracts
 
 Flow is follow:
 1) get block data with all transactions
 2) keep only those with "to" is null. It's a marker of contract created
 3) take transactions hash and fetch its receipt
 4) get contract address from receipt
-5) then we should inspect if contract support RFC-721 methods by calling estimatedGas
+5) then we should inspect if contract support ERC-721 methods by calling estimatedGas
 6) if certain error returns - that's what we are looking for. Cause we are not owners
 7) if method rejected then we assume its never exists
 8) print result and loop to #1
@@ -18,7 +18,7 @@ from aiohttp import ClientSession
 from app.resources.node import HTTPNodeResource
 
 
-async def is_implementing_rfc(
+async def is_implementing_erc(
     contract_address: str, node_resource: HTTPNodeResource, session: ClientSession
 ) -> bool:
     """
@@ -27,7 +27,7 @@ async def is_implementing_rfc(
     having_safe_transfer_from = await node_resource.get_estimated_gas_transfer_from(
         contract_address=contract_address, session=session
     )
-    if having_safe_transfer_from is None or not having_safe_transfer_from.error.is_rfc_721:  # type: ignore
+    if having_safe_transfer_from is None or not having_safe_transfer_from.error.is_erc_721:  # type: ignore
         return False
 
     having_owned_of = await node_resource.get_estimated_gas_owner_of(
@@ -69,7 +69,7 @@ async def find_contracts_in_block(
 
     # boolean mask to filter by index
     interface_mask_tasks = [
-        is_implementing_rfc(
+        is_implementing_erc(
             contract_address=resp.result.contract_address,
             node_resource=node_resource,
             session=session,

@@ -16,7 +16,7 @@ class Error:
     message: str
 
     @property
-    def is_rfc_721(self) -> bool:
+    def is_erc_721(self) -> bool:
         return (
             self.message == "execution reverted: ERC721: transfer caller is not owner nor approved"
         )
