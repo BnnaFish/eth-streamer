@@ -29,8 +29,8 @@ down:
 	@docker-compose down -v --remove-orphans
 
 # docker: built containers
-build.web:
-	@docker-compose build web
+build.dev:
+	@docker-compose build dev
 
 build.test:
 	@docker-compose build test
@@ -42,7 +42,7 @@ build.bash:
 	@docker-compose build bash
 
 build.bash:
-	@docker-compose build web
+	@docker-compose build dev
 
 # docker: exec
 bash:
@@ -67,5 +67,5 @@ dc.test_integration: stop build.test_integration
 	@docker-compose run test_integration make test_integration;
 	@docker-compose stop;
 
-dc.run: stop build.web
-	@docker-compose up web
+dc.run: stop build.dev
+	@docker-compose up dev
